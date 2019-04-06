@@ -13,10 +13,9 @@
      num=_num;
      unit=_unit;
  }
- PhysicalNumber::~PhysicalNumber()
- {
 
- }
+ PhysicalNumber::~PhysicalNumber(){}
+
     double PhysicalNumber::getNum()
     {
         return num;
