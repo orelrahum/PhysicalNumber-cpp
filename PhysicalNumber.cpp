@@ -8,110 +8,110 @@
  using namespace std;
  using namespace ariel;
 
- PhysicalNumber::PhysicalNumber(double _num,Unit _unit)
+ PhysicalNumber::PhysicalNumber(double num, Unit type)
  {
-     num=_num;
-     unit=_unit;
+     value=num;
+     unit=type;
  }
 
  PhysicalNumber::~PhysicalNumber(){}
 
-    double PhysicalNumber::getNum()
-    {
-        return num;
-    }
-    Unit PhysicalNumber::getUnit()
-    {
-        return unit;
-    } 
+ double PhysicalNumber::getNum()
+ {
+     return num;
+ }
+ Unit PhysicalNumber::getUnit()
+ {
+     return unit;
+ } 
 
-       PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber& other) const 
-       {
-           return other;
-       }
-       PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber& other) const 
-       {
-           return other;
-       }
+PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber& other) const 
+{
+    return other;
+}
+PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber& other) const 
+{
+    return other;
+}
 
-       
-       PhysicalNumber PhysicalNumber::operator-() const
-       {
-           return PhysicalNumber(-num,unit);
-       }
-       PhysicalNumber PhysicalNumber::operator+() const
-       {
-           return PhysicalNumber(num,unit);
-       }
 
-    //    const PhysicalNumber& PhysicalNumber::operator=(const PhysicalNumber& other) 
-    //    {
-    //        //add delete to .cpp
-    //        return other;
-    //    }
+PhysicalNumber PhysicalNumber::operator-() const
+{
+    return PhysicalNumber(-num,unit);
+}
+PhysicalNumber PhysicalNumber::operator+() const
+{
+    return PhysicalNumber(num,unit);
+}
 
-    
-       const PhysicalNumber& PhysicalNumber::operator+=(const PhysicalNumber& other)
-       {
-           return other;
-       }
-       const PhysicalNumber& PhysicalNumber::operator-=(const PhysicalNumber& other)
-       {
-           return other;
-       }
+//    const PhysicalNumber& PhysicalNumber::operator=(const PhysicalNumber& other) 
+//    {
+//        //add delete to .cpp
+//        return other;
+//    }
 
-       const PhysicalNumber& PhysicalNumber::operator++()
-       {
-           num++;
-           return *this;
-       }
-       const PhysicalNumber& PhysicalNumber::operator--()
-       {
-           num--;
-           return *this;
-       }
 
-      PhysicalNumber PhysicalNumber::operator++(int)
-      {
-        //    PhysicalNumber temp(*this);
-        //   num++;
-        //   return temp;
-          return *this;
-      }
-      PhysicalNumber PhysicalNumber::operator--(int)
-      {
-        //   PhysicalNumber temp(*this);
-        //   num--;
-        //   return temp;
-        return *this;
-      }
+const PhysicalNumber& PhysicalNumber::operator+=(const PhysicalNumber& other)
+{
+    return other;
+}
+const PhysicalNumber& PhysicalNumber::operator-=(const PhysicalNumber& other)
+{
+    return other;
+}
 
-     
+const PhysicalNumber& PhysicalNumber::operator++()
+{
+    num++;
+    return *this;
+}
+const PhysicalNumber& PhysicalNumber::operator--()
+{
+    num--;
+    return *this;
+}
 
-       bool PhysicalNumber::operator ==(const  PhysicalNumber&  a)const 
-       {
-           return true;
-       }
-       bool PhysicalNumber::operator !=(const  PhysicalNumber&  a)const
-       {
-           return true;
-       }
-       bool PhysicalNumber::operator <=(const  PhysicalNumber&  a)const 
-       {
-           return true;
-       }
-       bool PhysicalNumber::operator >=(const  PhysicalNumber&  a)const
-       {
-           return true;
-       }
-       bool PhysicalNumber::operator <(const  PhysicalNumber&  a)const 
-       {
-           return true;
-       }
-       bool PhysicalNumber::operator >(const  PhysicalNumber&  a)const
-       {
-           return true;
-       }
+PhysicalNumber PhysicalNumber::operator++(int)
+{
+ //    PhysicalNumber temp(*this);
+ //   num++;
+ //   return temp;
+   return *this;
+}
+PhysicalNumber PhysicalNumber::operator--(int)
+{
+ //   PhysicalNumber temp(*this);
+ //   num--;
+ //   return temp;
+ return *this;
+}
+
+
+
+bool PhysicalNumber::operator ==(const  PhysicalNumber&  a)const 
+{
+    return true;
+}
+bool PhysicalNumber::operator !=(const  PhysicalNumber&  a)const
+{
+    return true;
+}
+bool PhysicalNumber::operator <=(const  PhysicalNumber&  a)const 
+{
+    return true;
+}
+bool PhysicalNumber::operator >=(const  PhysicalNumber&  a)const
+{
+    return true;
+}
+bool PhysicalNumber::operator <(const  PhysicalNumber&  a)const 
+{
+    return true;
+}
+bool PhysicalNumber::operator >(const  PhysicalNumber&  a)const
+{
+    return true;
+}
 
 
     double PhysicalNumber::convert(const PhysicalNumber p1, const PhysicalNumber p2)
