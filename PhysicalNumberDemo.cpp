@@ -10,7 +10,8 @@
 #include <stdexcept>
 using std::cout, std::endl, std::boolalpha;
 #include "PhysicalNumber.h"
-using ariel::PhysicalNumber;
+#include "Unit.h"
+using ariel::PhysicalNumber, ariel::Unit;
 
 int main() {
   try {
@@ -40,4 +41,5 @@ int main() {
   } catch (...) {
     cout << "Unexpected exception!" << endl;
   }
+   return 100;
 }

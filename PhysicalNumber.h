@@ -1,3 +1,5 @@
+
+ 
  #include <iostream>
  #include "Unit.h"
 using std::istream,std::ostream,std::istringstream;
@@ -15,7 +17,7 @@ using std::istream,std::ostream,std::istringstream;
        public:
     //constructors
     PhysicalNumber(double num,Unit unit);
-    ~PhysicalNumber();
+
     double getNum();
     Unit getUnit();
 
@@ -29,11 +31,11 @@ using std::istream,std::ostream,std::istringstream;
        PhysicalNumber operator+() const;
 
        //const PhysicalNumber& operator=(const PhysicalNumber& other); 
-       const PhysicalNumber& operator+=(const PhysicalNumber& other);
-       const PhysicalNumber& operator-=(const PhysicalNumber& other);
+        PhysicalNumber& operator+=(const PhysicalNumber& other);
+        PhysicalNumber& operator-=(const PhysicalNumber& other);
 
-       const PhysicalNumber& operator++();
-       const PhysicalNumber& operator--();
+        PhysicalNumber& operator++();
+        PhysicalNumber& operator--();
 
       PhysicalNumber operator++(int);
       PhysicalNumber operator--(int);
@@ -57,4 +59,4 @@ using std::istream,std::ostream,std::istringstream;
    };
 
 
- };
+};
