@@ -7,62 +7,72 @@
 using namespace std;
 using namespace ariel;
 
-PhysicalNumber::PhysicalNumber(double _num, Unit _unit)
+///////////////Constructor/////////////
+PhysicalNumber::PhysicalNumber(double mynum, Unit myunit)
 {
-    num = _num;
-    unit = _unit;
+    num = mynum;
+    unit = myunit;
 }
+
+//////////////// operations +, -, +=, -=, ==, !=////////////////
 
 PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &other) const
 {
-
-    double res = convert(*this, other); // if not able to convert - throw exception
-
+    double res = convert(*this, other); 
     return PhysicalNumber(this->num + res, this->unit);
 }
+
 PhysicalNumber PhysicalNumber::operator-(const PhysicalNumber &other) const
 {
-    double res = convert(*this, other); // if not able to convert - throw exception
-
+    double res = convert(*this, other); 
     return PhysicalNumber(this->num - res, this->unit);
 }
 
-PhysicalNumber PhysicalNumber::operator-() const
-{
-    return PhysicalNumber(-num, unit);
-}
-PhysicalNumber PhysicalNumber::operator+() const
-{
-    return PhysicalNumber(num, unit);
-}
 
-//    const PhysicalNumber& PhysicalNumber::operator=(const PhysicalNumber& other)
-//    {
-//        //add delete to .cpp
-//        return other;
-//    }
+PhysicalNumber PhysicalNumber::operator-() const { return PhysicalNumber(-num, unit); }
+
+PhysicalNumber PhysicalNumber::operator+() const { return PhysicalNumber(num, unit); }
+
 
  PhysicalNumber &PhysicalNumber::operator+=(const PhysicalNumber &other)
 {
-
-    double res = convert(*this, other); // if not able to convert - throw exception
-
+    double res = convert(*this, other); 
     this->num = this->num + res;
     return *this;
 }
+
  PhysicalNumber &PhysicalNumber::operator-=(const PhysicalNumber &other)
 {
-    double res = convert(*this, other); // if not able to convert - throw exception
-
+    double res = convert(*this, other); 
     this->num = this->num - res;
     return *this;
+
 }
+
+bool PhysicalNumber::operator==(const PhysicalNumber &value) const
+{
+    double number = 0;
+    try { number = convert(*this, value); }
+    catch (string e) { cerr << "Exception: Error in convert" << endl; }
+    return this->num == number;
+}
+
+bool PhysicalNumber::operator!=(const PhysicalNumber &value) const
+{
+    double number = 0;
+    try { number = convert(*this, value); }
+    catch (string e) { cerr << "Exception: Error in convert" << endl; }
+    return this->num != number;
+}
+
+////////////////operations ++, -- ///////////////////
 
  PhysicalNumber &PhysicalNumber::operator++()
 {
     num++;
     return *this;
 }
+
  PhysicalNumber &PhysicalNumber::operator--()
 {
     num--;
@@ -75,6 +85,7 @@ PhysicalNumber PhysicalNumber::operator++(int)
     num++;
     return temp;
 }
+
 PhysicalNumber PhysicalNumber::operator--(int)
 {
     PhysicalNumber temp(*this);
@@ -82,277 +93,128 @@ PhysicalNumber PhysicalNumber::operator--(int)
     return temp;
 }
 
-bool PhysicalNumber::operator==(const PhysicalNumber &a) const
-{
-    double number = 0;
-    try
-    {
-        number = convert(*this, a);
-    }
-    catch (string e)
-    {
-        cerr << "Exception: Error in convert" << endl;
-    }
-    return this->num == number;
-}
-bool PhysicalNumber::operator!=(const PhysicalNumber &a) const
-{
-    double number = 0;
-    try
-    {
-        number = convert(*this, a);
-    }
-    catch (string e)
-    {
-        cerr << "Exception: Error in convert" << endl;
-    }
-    return this->num != number;
-}
 
-bool PhysicalNumber::operator<=(const PhysicalNumber &a) const
-{
-    double number = 0;
-    try
-    {
-        number = convert(*this, a);
-    }
-    catch (string e)
-    {
-        cerr << "Exception: Error in convert" << endl;
-    }
-    return this->num <= number;
-}
-bool PhysicalNumber::operator>=(const PhysicalNumber &a) const
-{
-    double number = 0;
-    try
-    {
-        number = convert(*this, a);
-    }
-    catch (string e)
-    {
-        cerr << "Exception: Error in convert" << endl;
-    }
-    return this->num >= number;
-}
-bool PhysicalNumber::operator<(const PhysicalNumber &a) const
-{
-    double number = 0;
-    try
-    {
-        number = convert(*this, a);
-    }
-    catch (string e)
-    {
-        cerr << "Exception: Error in convert" << endl;
-    }
-    return this->num < number;
-}
-bool PhysicalNumber::operator>(const PhysicalNumber &a) const
-{
-    double number = 0;
-    try
-    {
-        number = convert(*this, a);
-    }
-    catch (string e)
-    {
-        cerr << "Exception: Error in convert" << endl;
-    }
-    return this->num > number;
-}
 
-double PhysicalNumber::convert(const PhysicalNumber &p1, const PhysicalNumber &p2) const
+////////////  Function that converts units  /////////////////
+
+double PhysicalNumber::convert(const PhysicalNumber &first, const PhysicalNumber &second) const
 {
-    double res = 0;
-    double left_value = p1.num;
-    double right_value = p2.num;
+    Unit l_unit = first.unit;
+    Unit r_unit = second.unit;
+    
+    double l_val = first.num;
+    double r_val = second.num;
 
-    Unit left_unit = p1.unit;
-    Unit right_unit = p2.unit;
+    double result = 0;
 
-    switch (right_unit)
+    switch (r_unit)
     {
     case Unit::KM:
 
-        if (left_unit == Unit::M) // km to m
-        {
-            res = right_value * 1000;
-        }
-        else if (left_unit == Unit::CM) //km to cm
-        {
-            res = right_value * 100000;
-        }
-        else if (left_unit == Unit::KM)
-        { // kg to kg
+        if (l_unit == Unit::M) { result = r_val * 1000; }
 
-            res = right_value * 1;
-        }
-        else
-        {
-            throw std::invalid_argument("can't convert");
-        }
+        else if (l_unit == Unit::CM) { result = r_val * 100000; }
+
+        else if (l_unit == Unit::KM) { result = r_val * 1; }
+
+        else { throw std::invalid_argument("can't convert");}
+
         break;
+
     case Unit::M:
 
-        if (left_unit == Unit::CM) //m to cm
-        {
-            res = right_value * 100;
-        }
-        else if (left_unit == Unit::KM) //m to km
-        {
-            res = right_value / 1000;
-        }
-        else if (left_unit == Unit::M)
-        { // m to m
+        if (l_unit == Unit::CM) { result = r_val * 100; }
 
-            res = right_value * 1;
-        }
-        else
-        {
-            throw std::invalid_argument("can't convert");
-        }
+        else if (l_unit == Unit::KM) { result = r_val / 1000; }
+
+        else if (l_unit == Unit::M) { result = r_val * 1; }
+
+        else { throw std::invalid_argument("can't convert"); }
+
         break;
+
     case Unit::CM:
 
-        if (left_unit == Unit::M) // cm to m
-        {
-            res = right_value / 100;
-        }
-        else if (left_unit == Unit::KM) // cm to km
-        {
-            res = right_value / 100000;
-        }
-        else if (left_unit == Unit::CM)
-        { // cm to cm
+        if (l_unit == Unit::M) { result = r_val / 100; }
 
-            res = right_value * 1;
-        }
-        else
-        {
-            throw std::invalid_argument("can't convert");
-        }
-        break;
+        else if (l_unit == Unit::KM) { result = r_val / 100000; }
+
+        else if (l_unit == Unit::CM) { result = r_val * 1; }
+
+        else { throw std::invalid_argument("can't convert"); }
+
+	break;
+
     case Unit::HOUR:
 
-        if (left_unit == Unit::MIN) // hour to min
-        {
-            res = right_value * 60;
-        }
-        else if (left_unit == Unit::SEC) // hour to sec
-        {
-            res = right_value * 3600;
-        }
-        else if (left_unit == Unit::HOUR)
-        { // hour to hour
-
-            res = right_value * 1;
-        }
-        else
-        {
-            throw std::invalid_argument("can't convert");
-        }
+        if (l_unit == Unit::MIN) { result = r_val * 60; }
+        
+        else if (l_unit == Unit::SEC) { result = r_val * 3600; }
+        
+        else if (l_unit == Unit::HOUR) { result = r_val * 1; }
+        
+        else { throw std::invalid_argument("can't convert"); }
+        
         break;
+
     case Unit::MIN:
 
-        if (left_unit == Unit::HOUR) // min to hour
-        {
-            res = right_value / 60;
-        }
-        else if (left_unit == Unit::SEC) //min to sec
-        {
-            res = right_value * 60;
-        }
-        else if (left_unit == Unit::MIN)
-        {
-            // min to min
-
-                    res = right_value * 1;
-        }
-        else
-        {
-            throw std::invalid_argument("can't convert");
-        }
+        if (l_unit == Unit::HOUR) { result = r_val / 60; }
+        
+        else if (l_unit == Unit::SEC) { result = r_val * 60; }
+        
+        else if (l_unit == Unit::MIN) { result = r_val * 1; }
+        
+        else { throw std::invalid_argument("can't convert"); }
+        
         break;
+
     case Unit::SEC:
 
-        if (left_unit == Unit::MIN) // sec to min
-        {
-            res = right_value / 60;
-        }
-        else if (left_unit == Unit::HOUR) // sec to hour
-        {
-            res = right_value / 3600;
-        }
-        else if (left_unit == Unit::SEC)
-        { // sec to sec
-
-            res = right_value * 1;
-        }
-        else
-        {
-            throw std::invalid_argument("can't convert");
-        }
+        if (l_unit == Unit::MIN) { result = r_val / 60; }
+        
+        else if (l_unit == Unit::HOUR) { result = r_val / 3600; }
+        
+        else if (l_unit == Unit::SEC) { result = r_val * 1; }
+        
+        else { throw std::invalid_argument("can't convert"); }
+        
         break;
+
     case Unit::TON:
 
-        if (left_unit == Unit::KG) //ton to kg
-        {
-            res = right_value * 1000;
-        }
-        else if (left_unit == Unit::G) //ton to g
-        {
-            res = right_value * 1000000;
-        }
-        else if (left_unit == Unit::TON)
-        { // ton to tom
-
-            res = right_value * 1;
-        }
-        else
-        {
-            throw std::invalid_argument("can't convert");
-        }
+        if (l_unit == Unit::KG) { result = r_val * 1000; }
+        
+        else if (l_unit == Unit::G) { result = r_val * 1000000; }
+        
+        else if (l_unit == Unit::TON) { result = r_val * 1; }
+        
+        else { throw std::invalid_argument("can't convert"); }
+        
         break;
+
     case Unit::KG:
 
-        if (left_unit == Unit::G) // kg to g
-        {
-            res = right_value * 1000;
-        }
-        else if (left_unit == Unit::TON) //kg to ton
-        {
-            res = right_value / 1000;
-        }
-        else if (left_unit == Unit::KG)
-        { // kg to kg
-
-            res = right_value * 1;
-        }
-        else
-        {
-            throw std::invalid_argument("can't convert");
-        }
+        if (l_unit == Unit::G) { result = r_val * 1000; }
+        
+        else if (l_unit == Unit::TON) { result = r_val / 1000; }
+        
+        else if (l_unit == Unit::KG) { result = r_val * 1; }
+        
+        else { throw std::invalid_argument("can't convert"); }
+        
         break;
+
     case Unit::G:
 
-        if (left_unit == Unit::TON) // g to ton
-        {
-            res = right_value / 1000000;
-        }
-        else if (left_unit == Unit::KG) // g to kg
-        {
-            res = right_value / 1000;
-        }
-        else if (left_unit == Unit::G)
-        { // g to g
-
-            res = right_value * 1;
-        }
-        else
-        {
-            throw std::invalid_argument("can't convert");
-        }
+        if (l_unit == Unit::TON) { result = r_val / 1000000; }
+        
+        else if (l_unit == Unit::KG) { result = r_val / 1000; }
+        
+        else if (l_unit == Unit::G) { result = r_val * 1; }
+        
+        else { throw std::invalid_argument("can't convert"); }
+        
         break;
 
     default:
@@ -360,7 +222,50 @@ double PhysicalNumber::convert(const PhysicalNumber &p1, const PhysicalNumber &p
         throw std::invalid_argument("can't convert");
     }
 
-    return res;
+    return result;
+}
+
+
+/////////////// operations <, >, <=, >= ///////////////////////
+
+bool PhysicalNumber::operator<(const PhysicalNumber &value) const
+{
+    double number = 0;
+    try { number = convert(*this, value); }
+    catch (string e) { cerr << "Exception: Error in convert" << endl; }
+    return this->num < number;
+}
+
+bool PhysicalNumber::operator>(const PhysicalNumber &value) const
+{
+    double number = 0;
+    try { number = convert(*this, value); }
+    catch (string e) { cerr << "Exception: Error in convert" << endl; }
+    return this->num > number;
+}
+
+bool PhysicalNumber::operator<=(const PhysicalNumber &value) const
+{
+    double number = 0;
+    try { number = convert(*this, value); }
+    catch (string e) { cerr << "Exception: Error in convert" << endl; }
+    return this->num <= number;
+}
+
+bool PhysicalNumber::operator>=(const PhysicalNumber &value) const
+{
+    double number = 0;
+    try { number = convert(*this, value); }
+    catch (string e) { cerr << "Exception: Error in convert" << endl; }
+    return this->num >= number;
+}
+
+
+//cin stream operator
+
+istream &ariel::operator>>(istream &is, PhysicalNumber &p)
+{
+    return is;
 }
 
 
@@ -374,27 +279,24 @@ ostream &ariel::operator<<(ostream &os, const PhysicalNumber &p)
         os << p.num << "[km]";
         break;
     }
-
     case Unit::M:
     {
         os << p.num << "[m]";
         break;
     }
-
     case Unit::CM:
     {
         os << p.num << "[cm]";
         break;
     }
-
-    case Unit::MIN:
-    {
-        os << p.num << "[min]";
-        break;
-    }
     case Unit::HOUR:
     {
         os << p.num << "[hour]";
+        break;
+    }
+    case Unit::MIN:
+    {
+        os << p.num << "[min]";
         break;
     }
     case Unit::SEC:
@@ -407,23 +309,17 @@ ostream &ariel::operator<<(ostream &os, const PhysicalNumber &p)
         os << p.num << "[ton]";
         break;
     }
-    case Unit::G:
-    {
-        os << p.num << "[g]";
-        break;
-    }
     case Unit::KG:
     {
         os << p.num << "[kg]";
         break;
     }
+    case Unit::G:
+    {
+        os << p.num << "[g]";
+        break;
+    }
     }
     return os;
-}
-
-//cin stream operator
-istream &ariel::operator>>(istream &is, PhysicalNumber &p)
-{
-    return is;
 }
 
