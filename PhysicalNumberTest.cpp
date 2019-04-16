@@ -1,7 +1,7 @@
 /**
  * Examples of automatic tests for the exercise on physical numbers.
  *
- * @author Erel Segal-Halevi
+ * @author Naomi Oyer and Orel Rahum
  * @since 2019-02
  */
 
@@ -223,8 +223,8 @@ int main() {
     .CHECK_OUTPUT(a2++,"4[km]")                                       //3[km]++ = 4[cm]
     .CHECK_OUTPUT(a3++,"5[m]")                                        //4[m]++ = 5[m]
     .CHECK_OUTPUT(a4++,"1.1[km]")                                     //0.1[km]++ = 1.1[km]
-    //.CHECK_OUTPUT(PhysicalNumber(60,Unit::MIN)++,"61[min]")           //60[min]++ = 61[min]
-    //.CHECK_OUTPUT(PhysicalNumber(99,Unit::SEC)++,"100[min]")          //99[min]++ = 100[min]
+    .CHECK_OUTPUT(PhysicalNumber(60,Unit::MIN)++,"61[min]")           //60[min]++ = 61[min]
+    .CHECK_OUTPUT(PhysicalNumber(99,Unit::SEC)++,"100[min]")          //99[min]++ = 100[min]
 
     
     .setname("Operator '--(postfix)' unary - Compatible dimensions")
@@ -232,8 +232,8 @@ int main() {
     .CHECK_OUTPUT(a2--,"3[km]")                                       //4[km]-- = 3[cm]
     .CHECK_OUTPUT(a3--,"4[m]")                                        //5[m]-- = 4[m]
     .CHECK_OUTPUT(a4--,"0.1[km]")                                     //1.1[km]-- = 0.1[km]
-    //.CHECK_OUTPUT(PhysicalNumber(60,Unit::MIN)--,"59[min]")           //60[min]-- = 59[min]
-    //.CHECK_OUTPUT(PhysicalNumber(99,Unit::SEC)--,"98[min]")          //99[min]-- = 98[min]
+    .CHECK_OUTPUT(PhysicalNumber(60,Unit::MIN)--,"59[min]")           //60[min]-- = 59[min]
+    .CHECK_OUTPUT(PhysicalNumber(99,Unit::SEC)--,"98[min]")          //99[min]-- = 98[min]
 
 
     .setname("Operator '(prefix)++' unary - Compatible dimensions")
@@ -241,8 +241,8 @@ int main() {
     .CHECK_OUTPUT(++a2,"4[km]")                                       //++3[km] = 4[cm]
     .CHECK_OUTPUT(++a3,"5[m]")                                        //++4[m] = 5[m]
     .CHECK_OUTPUT(++a4,"1.1[km]")                                     //++0.1[km] = 1.1[km]
-    //.CHECK_OUTPUT(++PhysicalNumber(60,Unit::MIN),"61[min]")           //++60[min] = 61[min]
-    //.CHECK_OUTPUT(++PhysicalNumber(99,Unit::SEC),"100[min]")          //++99[min] = 100[min]
+    .CHECK_OUTPUT(++PhysicalNumber(60,Unit::MIN),"61[min]")           //++60[min] = 61[min]
+    .CHECK_OUTPUT(++PhysicalNumber(99,Unit::SEC),"100[min]")          //++99[min] = 100[min]
 
 
     .setname("Operator '(prefix)--' unary - Compatible dimensions")
@@ -250,8 +250,8 @@ int main() {
     .CHECK_OUTPUT(--a2,"3[km]")                                       //--4[km] = 3[cm]
     .CHECK_OUTPUT(--a3,"4[m]")                                        //--5[m] = 4[m]
     .CHECK_OUTPUT(--a4,"0.1[km]")                                     //--1.1[km] = 0.1[km]
-    //.CHECK_OUTPUT(--PhysicalNumber(60,Unit::MIN),"59[min]")           //--60[min] = 59[min]
-    //.CHECK_OUTPUT(--PhysicalNumber(99,Unit::SEC),"98[min]")           //--99[min] = 98[min]
+    .CHECK_OUTPUT(--PhysicalNumber(60,Unit::MIN),"59[min]")           //--60[min] = 59[min]
+    .CHECK_OUTPUT(--PhysicalNumber(99,Unit::SEC),"98[min]")           //--99[min] = 98[min]
 
 
     .setname("Operator '+' unary - Compatible dimensions")

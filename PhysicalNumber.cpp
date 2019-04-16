@@ -265,7 +265,64 @@ bool PhysicalNumber::operator>=(const PhysicalNumber &value) const
 
 istream &ariel::operator>>(istream &is, PhysicalNumber &p)
 {
-    return is;
+    string s;
+    is >> s;
+    int pos1 = 0;
+    int pos2 = 0;
+
+    string unit_s;
+    int check_num;
+    double value;
+    string typeUnit[9] = {"km", "m", "cm", "hour", "min", "sec", "ton", "kg", "g"};
+
+    pos1 = s.find('[');
+    pos2 = s.find(']');
+    if ((pos1 != string::npos) && (pos2 != string::npos)) // if there is [ ]
+
+    {
+
+        unit_s = s.substr(pos1 + 1, pos2 - pos1 - 1);
+        bool flag = true;
+        for (int i = 0; i < 9; i++)
+        {
+            if ((typeUnit[i] == unit_s) && flag)
+            {
+                check_num = i;
+                flag = false;
+            }
+        }
+
+        string value_s = s.substr(0, pos1);
+
+        if (!flag)
+        {
+
+            try
+            {
+                value = stod(value_s);
+            }
+
+            catch (exception &e)
+            {
+                auto errorState = is.rdstate(); // remember error state
+                return is;
+            }
+
+            p.num = value;
+            p.unit = (Unit)check_num;
+        }
+        else
+        {
+            auto errorState = is.rdstate(); // remember error state
+        }
+    }
+
+    else
+    {
+        auto errorState = is.rdstate(); // remember error state
+    }
+
+return is;
 }
 
 
