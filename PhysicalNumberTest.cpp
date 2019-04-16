@@ -1,9 +1,3 @@
-/**
- * Examples of automatic tests for the exercise on physical numbers.
- *
- * @author Naomi Oyer and Orel Rahum
- * @since 2019-02
- */
 
 #include <iostream>
 #include <sstream>
@@ -19,31 +13,23 @@ int main() {
   if (signal == 0) {
 
     // BASIC TESTS - DO NOT CHANGE
-    PhysicalNumber a(2, Unit::KM);
-    PhysicalNumber b(300, Unit::M);
-    PhysicalNumber c(2, Unit::HOUR);
-    PhysicalNumber d(30, Unit::MIN);
+  PhysicalNumber a(2, Unit::KM);
+  PhysicalNumber b(300, Unit::M);
+  PhysicalNumber c(2, Unit::HOUR);
+  PhysicalNumber d(30, Unit::MIN);
+ 
+  PhysicalNumber e(3.2,Unit::KM);
+  PhysicalNumber f(80,Unit::M);
+  PhysicalNumber g(20, Unit::CM);
 
-    //Our test
-    PhysicalNumber a1(2, Unit::CM);
-    PhysicalNumber a2(3, Unit::KM);
-    PhysicalNumber a3(4, Unit::M);
-    PhysicalNumber a4(0.1, Unit::KM);
+  PhysicalNumber h(90, Unit::SEC);
+  PhysicalNumber i(40, Unit::MIN);
+  PhysicalNumber j(1, Unit::HOUR);
 
-    PhysicalNumber b1(2, Unit::SEC);
-    PhysicalNumber b2(3, Unit::MIN);
-    PhysicalNumber b3(4, Unit::HOUR);
-    PhysicalNumber b4(0.1, Unit::HOUR);
-
-    PhysicalNumber c1(2, Unit::G);
-    PhysicalNumber c2(3, Unit::KG);
-    PhysicalNumber c3(4, Unit::TON);
-    PhysicalNumber c4(0.1, Unit::TON);
-
-    PhysicalNumber x(100, Unit::G);
-    PhysicalNumber y(2, Unit::HOUR);
-    PhysicalNumber z(10, Unit::M);
-
+  PhysicalNumber k(100, Unit::G);
+  PhysicalNumber l(5.3, Unit::KG);
+  PhysicalNumber m(7, Unit::TON);
+   
     testcase
     .setname("Basic output")
     .CHECK_OUTPUT(a, "2[km]")
@@ -69,216 +55,337 @@ int main() {
     .CHECK_OK(istringstream("700[kg]") >> a)
     .CHECK_OUTPUT((a += PhysicalNumber(1, Unit::TON)), "1700[kg]")
 
+    // YOUR TESTS - INSERT AS MANY AS YOU WANT
+
+  .setname("Basic output- km,m,cm")
+  .CHECK_OUTPUT(e, "3.2[km]")
+  .CHECK_OUTPUT(f, "80[m]")
+  .CHECK_OUTPUT(g, "20[cm]")
+ 
+  .setname("Compatible dimensions- km,m,cm")
+  .CHECK_OUTPUT(-e,"-3.2[km]")
+  .CHECK_OUTPUT(-f, "-80[m]")
+  .CHECK_OUTPUT(-g, "-20[cm]")
+  .CHECK_OUTPUT(+e,"3.2[km]")
+  .CHECK_OUTPUT(+f, "80[m]")
+  .CHECK_OUTPUT(+g, "20[cm]")
+  .CHECK_OUTPUT(++e,"4.2[km]")
+  .CHECK_OUTPUT(++f, "81[m]")
+  .CHECK_OUTPUT(++g, "21[cm]")
+  .CHECK_OUTPUT(--e,"3.2[km]")
+  .CHECK_OUTPUT(--f, "80[m]")
+  .CHECK_OUTPUT(--g, "20[cm]")
+
+  .CHECK_OK(e++)
+  .CHECK_OUTPUT(e,"4.2[km]")
+  .CHECK_OK(f++)
+  .CHECK_OUTPUT(f, "81[m]")
+  .CHECK_OK(g++)
+  .CHECK_OUTPUT(g, "21[cm]")
+  .CHECK_OK(e--)
+  .CHECK_OUTPUT(e,"3.2[km]")
+  .CHECK_OK(f--)
+  .CHECK_OUTPUT(f, "80[m]")
+  .CHECK_OK(g--)
+  .CHECK_OUTPUT(g, "20[cm]")
+
+  .CHECK_OUTPUT(f+g,"80.2[m]")
+  .CHECK_OUTPUT(g+f,"8020[cm]")
+  .CHECK_OUTPUT(e+f,"3.28[km]")
+  .CHECK_OUTPUT(f+e,"3280[m]")
+  .CHECK_OUTPUT(g+e,"320020[cm]")
+  .CHECK_OUTPUT(e+g,"3.2002[km]")
+  .CHECK_OUTPUT(f-g,"79.8[m]")
+  .CHECK_OUTPUT(e-f,"3.12[km]")
+  .CHECK_OUTPUT(g-f,"-7980[cm]")
+  .CHECK_OUTPUT(f-e,"-3120[m]")
+  .CHECK_OUTPUT(g-e,"-319980[cm]")
+  .CHECK_OUTPUT(e-g,"3.1998[km]")
+
+  .CHECK_OUTPUT((e+=f),"3.28[km]")  //--> e=3.28 km
+  .CHECK_OUTPUT(e,"3.28[km]")
+  .CHECK_OUTPUT(e+e,"6.56[km]")
+  .CHECK_OUTPUT((f-=g),"79.8[m]")  //--> f=79.8 m
+  .CHECK_OUTPUT(f,"79.8[m]")
+  .CHECK_OUTPUT(f-f,"0[m]")
+  .CHECK_EQUAL(f<e,true)
+  .CHECK_OUTPUT((g+=f),"8000[cm]") //--> g = 8000 cm
+  .CHECK_OUTPUT(g,"8000[cm]")
+  .CHECK_EQUAL(f<=g,true)
+  .CHECK_OUTPUT((g-=g),"0[cm]")
+  .CHECK_OUTPUT(g,"0[cm]")  //--> g = 0 cm
+  .CHECK_OUTPUT(--g, "-1[cm]")   //--> g = -1 cm
+  .CHECK_OUTPUT(+g,"-1[cm]")   //--> g = -1 cm
+  .CHECK_EQUAL(f>g,true)
+  .CHECK_EQUAL(e>=g,true)
+  .CHECK_EQUAL(g==PhysicalNumber(-1, Unit::CM),true)
+  
 
 
-    
-    //Our tests 
-    .setname("Operator '+' binary - Compatible dimensions")
-    .CHECK_OUTPUT(a1+a2, "300002[cm]")                             //2[cm] + 3[km]
-    .CHECK_OUTPUT(a1+a3, "402[cm]")                                //2[cm] + 4[m]
-    .CHECK_OUTPUT(a1+a4, "10002[cm]")                              //2[cm] + 0.1[km]
-    .CHECK_OUTPUT(a2+a1, "3.00002[km]")                            //3[km] + 2[cm]
-    .CHECK_OUTPUT(b1+b2, "182[sec]")                               //2[sec] + 3[min]
-    .CHECK_OUTPUT(b1+b3, "14402[sec]")                             //2[sec] + 4[hour]
-    .CHECK_OUTPUT(b1+b4, "362[sec]")                               //2[sec] + 0.1[hour]
-    .CHECK_OUTPUT(b3+b2, "4.05[hour]")                             //4[hour] + 3[min]
-    .CHECK_OUTPUT(c1+c2, "3002[g]")                                //2[g] + 3[kg]
-    .CHECK_OUTPUT(c1+c3, "4000002[g]")                             //2[g] + 4[ton]
-    .CHECK_OUTPUT(c1+c4, "100002[g]")                              //2[g] + 0.1[ton]
-    .CHECK_OUTPUT(c2+c1, "3.002[kg]")                              //3[kg] + 2[g]
+  .setname("Incompatible dimensions- km,m,cm -- (+,-,+=,-=,<,>,<=,>=)")
+  .CHECK_THROWS(e+h) .CHECK_THROWS(e+i) .CHECK_THROWS(e+j) .CHECK_THROWS(e+k)
+  .CHECK_THROWS(e+l) .CHECK_THROWS(e+m) .CHECK_THROWS(f+h) .CHECK_THROWS(f+i)
+  .CHECK_THROWS(f+j) .CHECK_THROWS(f+k) .CHECK_THROWS(f+l) .CHECK_THROWS(f+m)
+  .CHECK_THROWS(g+h) .CHECK_THROWS(g+i) .CHECK_THROWS(g+j) .CHECK_THROWS(g+k) 
+  .CHECK_THROWS(g+l) .CHECK_THROWS(g+m)
+  
+  .CHECK_THROWS(e+=h) .CHECK_THROWS(e+=i) .CHECK_THROWS(e+=j) .CHECK_THROWS(e+=k)
+  .CHECK_THROWS(e+=l) .CHECK_THROWS(e+=m) .CHECK_THROWS(f+=h) .CHECK_THROWS(f+=i) 
+  .CHECK_THROWS(f+=j) .CHECK_THROWS(f+=k) .CHECK_THROWS(f+=l) .CHECK_THROWS(f+=m)
+  .CHECK_THROWS(g+=h) .CHECK_THROWS(g+=i) .CHECK_THROWS(g+=j) .CHECK_THROWS(g+=k)
+  .CHECK_THROWS(g+=l) .CHECK_THROWS(g+=m)
+
+  .CHECK_THROWS(e-h) .CHECK_THROWS(e-i) .CHECK_THROWS(e-j) .CHECK_THROWS(e-k)
+  .CHECK_THROWS(e-l) .CHECK_THROWS(e-m) .CHECK_THROWS(f-h) .CHECK_THROWS(f-i) 
+  .CHECK_THROWS(f-j) .CHECK_THROWS(f-k) .CHECK_THROWS(f-l) .CHECK_THROWS(f-m)
+  .CHECK_THROWS(g-h) .CHECK_THROWS(g-i) .CHECK_THROWS(g-j) .CHECK_THROWS(g-k)
+  .CHECK_THROWS(g-l) .CHECK_THROWS(g-m)
+
+  .CHECK_THROWS(e-=h) .CHECK_THROWS(e-=i) .CHECK_THROWS(e-=j) .CHECK_THROWS(e-=k)
+  .CHECK_THROWS(e-=l) .CHECK_THROWS(e-=m) .CHECK_THROWS(f-=h) .CHECK_THROWS(f-=i) 
+  .CHECK_THROWS(f-=j) .CHECK_THROWS(f-=k) .CHECK_THROWS(f-=l) .CHECK_THROWS(f-=m)
+  .CHECK_THROWS(g-=h) .CHECK_THROWS(g-=i) .CHECK_THROWS(g-=j) .CHECK_THROWS(g-=k)
+  .CHECK_THROWS(g-=l) .CHECK_THROWS(g-=m)
+
+  .CHECK_THROWS(e<h) .CHECK_THROWS(e<i) .CHECK_THROWS(e<j) .CHECK_THROWS(e<k)
+  .CHECK_THROWS(e<l) .CHECK_THROWS(e<m) .CHECK_THROWS(f<h) .CHECK_THROWS(f<i)
+  .CHECK_THROWS(f<j) .CHECK_THROWS(f<k) .CHECK_THROWS(f<l) .CHECK_THROWS(f<m)
+  .CHECK_THROWS(g<h) .CHECK_THROWS(g<i) .CHECK_THROWS(g<j) .CHECK_THROWS(g<k) 
+  .CHECK_THROWS(g<l) .CHECK_THROWS(g<m)
+
+  .CHECK_THROWS(e<=h) .CHECK_THROWS(e<=i) .CHECK_THROWS(e<=j) .CHECK_THROWS(e<=k)
+  .CHECK_THROWS(e<=l) .CHECK_THROWS(e<=m) .CHECK_THROWS(f<=h) .CHECK_THROWS(f<=i)
+  .CHECK_THROWS(f<=j) .CHECK_THROWS(f<=k) .CHECK_THROWS(f<=l) .CHECK_THROWS(f<=m)
+  .CHECK_THROWS(g<=h) .CHECK_THROWS(g<=i) .CHECK_THROWS(g<=j) .CHECK_THROWS(g<=k) 
+  .CHECK_THROWS(g<=l) .CHECK_THROWS(g<=m)
+
+  .CHECK_THROWS(e>=h) .CHECK_THROWS(e>=i) .CHECK_THROWS(e>=j) .CHECK_THROWS(e>=k)
+  .CHECK_THROWS(e>=l) .CHECK_THROWS(e>=m) .CHECK_THROWS(f>=h) .CHECK_THROWS(f>=i)
+  .CHECK_THROWS(f>=j) .CHECK_THROWS(f>=k) .CHECK_THROWS(f>=l) .CHECK_THROWS(f>=m)
+  .CHECK_THROWS(g>=h) .CHECK_THROWS(g>=i) .CHECK_THROWS(g>=j) .CHECK_THROWS(g>=k) 
+  .CHECK_THROWS(g>=l) .CHECK_THROWS(g>=m)
+
+  .CHECK_THROWS(e>h) .CHECK_THROWS(e>i) .CHECK_THROWS(e>j) .CHECK_THROWS(e>k)
+  .CHECK_THROWS(e>l) .CHECK_THROWS(e>m) .CHECK_THROWS(f>h) .CHECK_THROWS(f>i)
+  .CHECK_THROWS(f>j) .CHECK_THROWS(f>k) .CHECK_THROWS(f>l) .CHECK_THROWS(f>m)
+  .CHECK_THROWS(g>h) .CHECK_THROWS(g>i) .CHECK_THROWS(g>j) .CHECK_THROWS(g>k) 
+  .CHECK_THROWS(g>l) .CHECK_THROWS(g>m)
+
+  .CHECK_THROWS(e==h) .CHECK_THROWS(e==i) .CHECK_THROWS(e==j) .CHECK_THROWS(e==k)
+  .CHECK_THROWS(e==l) .CHECK_THROWS(e==m) .CHECK_THROWS(f==h) .CHECK_THROWS(f==i)
+  .CHECK_THROWS(f==j) .CHECK_THROWS(f==k) .CHECK_THROWS(f==l) .CHECK_THROWS(f==m)
+  .CHECK_THROWS(g==h) .CHECK_THROWS(g==i) .CHECK_THROWS(g==j) .CHECK_THROWS(g==k) 
+  .CHECK_THROWS(g==l) .CHECK_THROWS(g==m)
+
+  .CHECK_THROWS(e!=h) .CHECK_THROWS(e!=i) .CHECK_THROWS(e!=j) .CHECK_THROWS(e!=k)
+  .CHECK_THROWS(e!=l) .CHECK_THROWS(e!=m) .CHECK_THROWS(f!=h) .CHECK_THROWS(f!=i)
+  .CHECK_THROWS(f!=j) .CHECK_THROWS(f!=k) .CHECK_THROWS(f!=l) .CHECK_THROWS(f!=m)
+  .CHECK_THROWS(g!=h) .CHECK_THROWS(g!=i) .CHECK_THROWS(g!=j) .CHECK_THROWS(g!=k) 
+  .CHECK_THROWS(g!=l) .CHECK_THROWS(g!=m)
 
 
-    .setname("Operator '+' binary - Incompatible dimensions")
-    .CHECK_THROWS(a1+b1)
-    .CHECK_THROWS(b1+c1)
-    .CHECK_THROWS(c1+a1)
-    .CHECK_THROWS(a2+c2)
+  .setname("Basic output- hour,min,sec")
+  .CHECK_OUTPUT(h, "90[sec]")
+  .CHECK_OUTPUT(i, "40[min]")
+  .CHECK_OUTPUT(j, "1[hour]")
+
+  .setname("Compatible dimensions- hour,min,sec")
+  .CHECK_OUTPUT(-h, "-90[sec]")
+  .CHECK_OUTPUT(-i, "-40[min]")
+  .CHECK_OUTPUT(-j, "-1[hour]")
+  .CHECK_OUTPUT(+h, "90[sec]")
+  .CHECK_OUTPUT(+i, "40[min]")
+  .CHECK_OUTPUT(+j, "1[hour]")
+  .CHECK_OUTPUT(++h, "91[sec]")
+  .CHECK_OUTPUT(++i, "41[min]")
+  .CHECK_OUTPUT(++j, "2[hour]")
+  .CHECK_OUTPUT(--h, "90[sec]")
+  .CHECK_OUTPUT(--i, "40[min]")
+  .CHECK_OUTPUT(--j, "1[hour]")
+
+  .CHECK_OK(h++)
+  .CHECK_OUTPUT(h, "91[sec]")
+  .CHECK_OK(i++)
+  .CHECK_OUTPUT(i, "41[min]")
+  .CHECK_OK(j++)
+  .CHECK_OUTPUT(j, "2[hour]")
+  .CHECK_OK(h--)
+  .CHECK_OUTPUT(h, "90[sec]")
+  .CHECK_OK(i--)
+  .CHECK_OUTPUT(i, "40[min]")
+  .CHECK_OK(j--)
+  .CHECK_OUTPUT(j, "1[hour]")
+
+  .CHECK_OUTPUT(h+i,"2490[sec]") 
+  .CHECK_OUTPUT(i+h,"41.5[min]")
+  .CHECK_OUTPUT(h+j,"3690[sec]") 
+  .CHECK_OUTPUT(j+h,"1.02500[hour]")
+  .CHECK_OUTPUT(i+j,"100[min]")
+  .CHECK_OUTPUT(j+i,"1.66666667[hour]") 
+  .CHECK_OUTPUT(i-h,"38.5[min]")
+  .CHECK_OUTPUT(j-h,"0.975[hour]")
+
+  .CHECK_OUTPUT(h-i,"-2310[sec]") 
+  .CHECK_OUTPUT(h-j,"-3510[sec]") 
+  .CHECK_OUTPUT(i-j,"-20[min]")
+  .CHECK_OUTPUT(j-i,"0.333333333[hour]") 
+ 
+
+  .CHECK_OUTPUT((i+=j),"100[min]") // --> i=100 min
+  .CHECK_OUTPUT(i,"100[min]")
+  .CHECK_OUTPUT(i+i,"200[min]")
+  .CHECK_OUTPUT((j-=h),"0.975[hour]")  //--> j=0.975 hour
+  .CHECK_OUTPUT(j,"0.975[hour]")
+  .CHECK_EQUAL(j<i,true)
+  .CHECK_OUTPUT(j-j,"0[hour]")
+  .CHECK_OUTPUT(i-j,"41.5[min]") 
+  .CHECK_OUTPUT((h+=j),"3600[sec]")  //-->h=3600 sec
+  .CHECK_OUTPUT(h,"3600[sec]") 
+  .CHECK_EQUAL(h>j,true)
+  .CHECK_EQUAL(i==PhysicalNumber(100, Unit::MIN),true)
+  .CHECK_EQUAL(h<=i,true)
+  .CHECK_EQUAL(i>=j,true)
 
 
-    .setname("Operator '-' binary - Compatible dimensions")
-    .CHECK_OUTPUT(a2-a1, "3.00002[km]")
-    .CHECK_OUTPUT(a3-a1, "3.98[m]")                                //4[m] - 2[cm]
-    .CHECK_OUTPUT(a4-a1, "0.09998[km]")                            //0.1[km] - 2[cm]
-    .CHECK_OUTPUT(a1-a2, "-299998[cm]")                            //2[cm] - 3[km]
-    .CHECK_OUTPUT(b2-b1, "2.9666666667[min]")                      //3[min] - 2[sec]
-    .CHECK_OUTPUT(b3-b1, "3.9994444444[hour]")                     //4[hour] - 2[sec]
-    .CHECK_OUTPUT(b4-b1, "0.0994444444[hour]")                     //0.1[hour] - 2[sec]
-    .CHECK_OUTPUT(b3-b2, "3.95[hour]")                             //4[hour] - 3[min]
+  .setname("Incompatible dimensions- hour,min,sec -- (+,-,+=,-=,<,>,<=,>=)")
+  .CHECK_THROWS(h+k) .CHECK_THROWS(h+l) .CHECK_THROWS(h+m)
+  .CHECK_THROWS(i+k) .CHECK_THROWS(i+l) .CHECK_THROWS(i+m)
+  .CHECK_THROWS(j+k) .CHECK_THROWS(j+l) .CHECK_THROWS(j+m)
+
+  .CHECK_THROWS(h+=k) .CHECK_THROWS(h+=l) .CHECK_THROWS(h+=m)
+  .CHECK_THROWS(i+=k) .CHECK_THROWS(i+=l) .CHECK_THROWS(i+=m)
+  .CHECK_THROWS(j+=k) .CHECK_THROWS(j+=l) .CHECK_THROWS(j+=m)
+
+  .CHECK_THROWS(h-k) .CHECK_THROWS(h-l) .CHECK_THROWS(h-m)
+  .CHECK_THROWS(i-k) .CHECK_THROWS(i-l) .CHECK_THROWS(i-m)
+  .CHECK_THROWS(j-k) .CHECK_THROWS(j-l) .CHECK_THROWS(j-m)
+
+  .CHECK_THROWS(h-=k) .CHECK_THROWS(h-=l) .CHECK_THROWS(h-=m)
+  .CHECK_THROWS(i-=k) .CHECK_THROWS(i-=l) .CHECK_THROWS(i-=m)
+  .CHECK_THROWS(j-=k) .CHECK_THROWS(j-=l) .CHECK_THROWS(j-=m)
+
+  .CHECK_THROWS(h<k) .CHECK_THROWS(h<l) .CHECK_THROWS(h<m)
+  .CHECK_THROWS(i<k) .CHECK_THROWS(i<l) .CHECK_THROWS(i<m)
+  .CHECK_THROWS(j<k) .CHECK_THROWS(j<l) .CHECK_THROWS(j<m)
+
+  .CHECK_THROWS(h<=k) .CHECK_THROWS(h<=l) .CHECK_THROWS(h<=m)
+  .CHECK_THROWS(i<=k) .CHECK_THROWS(i<=l) .CHECK_THROWS(i<=m)
+  .CHECK_THROWS(j<=k) .CHECK_THROWS(j<=l) .CHECK_THROWS(j<=m)
+
+  .CHECK_THROWS(h>k) .CHECK_THROWS(h>l) .CHECK_THROWS(h>m)
+  .CHECK_THROWS(i>k) .CHECK_THROWS(i>l) .CHECK_THROWS(i>m)
+  .CHECK_THROWS(j>k) .CHECK_THROWS(j>l) .CHECK_THROWS(j>m)
+
+  .CHECK_THROWS(h>=k) .CHECK_THROWS(h>=l) .CHECK_THROWS(h>=m)
+  .CHECK_THROWS(i>=k) .CHECK_THROWS(i>=l) .CHECK_THROWS(i>=m)
+  .CHECK_THROWS(j>=k) .CHECK_THROWS(j>=l) .CHECK_THROWS(j>=m)
+
+  .CHECK_THROWS(h==k) .CHECK_THROWS(h==l) .CHECK_THROWS(h==m)
+  .CHECK_THROWS(i==k) .CHECK_THROWS(i==l) .CHECK_THROWS(i==m)
+  .CHECK_THROWS(j==k) .CHECK_THROWS(j==l) .CHECK_THROWS(j==m)
+
+  .CHECK_THROWS(h!=k) .CHECK_THROWS(h!=l) .CHECK_THROWS(h!=m)
+  .CHECK_THROWS(i!=k) .CHECK_THROWS(i!=l) .CHECK_THROWS(i!=m)
+  .CHECK_THROWS(j!=k) .CHECK_THROWS(j!=l) .CHECK_THROWS(j!=m)
 
 
-    .setname("Operator '-' binary - Incompatible dimensions")
-    .CHECK_THROWS(a1-b1)
-    .CHECK_THROWS(b1-c1)
-    .CHECK_THROWS(c1-a1)
-    .CHECK_THROWS(a2-c2)
+
+ .setname("Basic output-ton,kg,g")
+  .CHECK_OUTPUT(k, "100[g]")
+  .CHECK_OUTPUT(l, "5.3[kg]")
+  .CHECK_OUTPUT(m, "7[ton]")
+
+  .setname("Compatible dimensions-ton,kg,g")
+  .CHECK_OUTPUT(-k, "-100[g]")
+  .CHECK_OUTPUT(-l, "-5.3[kg]")
+  .CHECK_OUTPUT(-m, "-7[ton]")
+  .CHECK_OUTPUT(+k, "100[g]")
+  .CHECK_OUTPUT(+l, "5.3[kg]")
+  .CHECK_OUTPUT(+m, "7[ton]")
+  .CHECK_OUTPUT(++k, "101[g]")
+  .CHECK_OUTPUT(++l, "6.3[kg]")
+  .CHECK_OUTPUT(++m, "8[ton]")
+  .CHECK_OUTPUT(--k, "100[g]")
+  .CHECK_OUTPUT(--l, "5.3[kg]")
+  .CHECK_OUTPUT(--m, "7[ton]")
+
+  .CHECK_OK(k++)
+  .CHECK_OUTPUT(k, "101[g]")
+  .CHECK_OK(l++)
+  .CHECK_OUTPUT(l, "6.3[kg]")
+  .CHECK_OK(m++)
+  .CHECK_OUTPUT(m, "8[ton]")
+  .CHECK_OK(k--)
+  .CHECK_OUTPUT(k, "100[g]")
+  .CHECK_OK(l--)
+  .CHECK_OUTPUT(l, "5.3[kg]")
+  .CHECK_OK(m--)
+  .CHECK_OUTPUT(m, "7[ton]")
+
+  .CHECK_OUTPUT(k+l,"5400[g]")
+  .CHECK_OUTPUT(l+k,"5.4[kg]")
+  .CHECK_OUTPUT(k+m,"7000100[g]")
+  .CHECK_OUTPUT(m+k,"7.0001[ton]")
+  .CHECK_OUTPUT(l+m,"7005.3[kg]")
+  .CHECK_OUTPUT(m+l,"7.0053[ton]")
+  .CHECK_OUTPUT(l-k,"5.2[kg]")
+  .CHECK_OUTPUT(m-k,"6.9999[ton]")
+  .CHECK_OUTPUT(k-l,"-5200[g]")
+  .CHECK_OUTPUT(k-m,"-6999900[g]")
+  .CHECK_OUTPUT(l-m,"-6994.7[kg]")
+  .CHECK_OUTPUT(m-l,"6.9947[ton]")
+
+  .CHECK_OUTPUT((l+=k),"5.4[kg]")  // --> l=5.4 kg
+  .CHECK_OUTPUT(l,"5.4[kg]")
+  .CHECK_OUTPUT(l+l,"10.8[kg]")
+  .CHECK_EQUAL(l==PhysicalNumber(5.4, Unit::KG),true)
+  .CHECK_OUTPUT((m-=k),"6.9999[ton]") //--> m=6.9999 ton
+  .CHECK_OUTPUT(m,"6.9999[ton]")
+  .CHECK_OUTPUT(m-m,"0[ton]")
+  .CHECK_EQUAL(m>=l,true)
+  .CHECK_OUTPUT((k+=m),"7000100[g]") //--> k=7000100 g
+  .CHECK_OUTPUT(k,"7000100[g]")
+  .CHECK_OUTPUT(k-k,"0[g]")
+  .CHECK_EQUAL(k>l,true)
+  .CHECK_EQUAL(m<=k,true)
+  .CHECK_EQUAL(l<m,true)
+  
+  
+
+  .setname("check input")
+  .CHECK_OK(istringstream("2[min]") >> e)
+  .CHECK_OUTPUT((e += PhysicalNumber(30, Unit::SEC)), "2.5[min]")
+  
+  .CHECK_OK(istringstream("30[kg]") >> l)
+  .CHECK_OUTPUT((l += PhysicalNumber(50, Unit::G)), "30.05[kg]")
+  
+  .CHECK_OK(istringstream("5[m]") >> k)
+  .CHECK_OUTPUT((k += PhysicalNumber(20, Unit::CM)), "5.2[m]")
 
 
-    .setname("Operator '+=' binary - Compatible dimensions")
-    .CHECK_OUTPUT((a1+=a2), "300002[cm]")                             //a1 = 2[cm] + 3[km]
-    .CHECK_OUTPUT((b1+=b3), "14402[sec]")                             //b1 = 2[sec] + 4[hour]
-    .CHECK_OUTPUT((b3+=b2), "4.05[hour]")                             //b3 = 4[hour] + 3[min]
-    .CHECK_OUTPUT((c1+=c4), "100002[g]")                              //c1 = 2[g] + 0.1[ton]
-    .CHECK_OUTPUT((c2+=c2), "6[kg]")                                  //c2 = 3[kg] + 3[kg]
+
+  .setname("check conversions")       
+
+  .CHECK_EQUAL((PhysicalNumber(1, Unit::HOUR))==(PhysicalNumber(60, Unit::MIN)),true)  
+  .CHECK_EQUAL((PhysicalNumber(3600, Unit::SEC))==(PhysicalNumber(60, Unit::MIN)),true)
+  .CHECK_EQUAL((PhysicalNumber(1, Unit::HOUR))==(PhysicalNumber(3600, Unit::SEC)),true)
+  .CHECK_EQUAL((PhysicalNumber(1, Unit::MIN))==(PhysicalNumber(60, Unit::SEC)),true)
+
+  .CHECK_EQUAL((PhysicalNumber(1, Unit::M))==(PhysicalNumber(100, Unit::CM)),true)
+  .CHECK_EQUAL((PhysicalNumber(1, Unit::KM))==(PhysicalNumber(1000, Unit::M)),true)
+  .CHECK_EQUAL((PhysicalNumber(1, Unit::KM))==(PhysicalNumber(100000, Unit::CM)),true)
+  .CHECK_EQUAL((PhysicalNumber(1000, Unit::M))==(PhysicalNumber(100000, Unit::CM)),true)
+
+  .CHECK_EQUAL((PhysicalNumber(1, Unit::KG))==(PhysicalNumber(1000, Unit::G)),true)
+  .CHECK_EQUAL((PhysicalNumber(1, Unit::TON))==(PhysicalNumber(1000, Unit::KG)),true)
+  .CHECK_EQUAL((PhysicalNumber(1, Unit::TON))==(PhysicalNumber(1000000, Unit::G)),true)
+  .CHECK_EQUAL((PhysicalNumber(1000, Unit::KG))==(PhysicalNumber(1000000, Unit::G)),true)
 
 
-    .setname("Operator '+=' binary - Incompatible dimensions")
-    .CHECK_THROWS(a1+=b1)
-    .CHECK_THROWS(b1+=c1)
-    .CHECK_THROWS(c1+=a1)
-    .CHECK_THROWS(a2+=c2)
-
-
-    .setname("Operator '-=' binary - Compatible dimensions")
-    .CHECK_OUTPUT((a1-=a2), "2[cm]")                                  //a1 = 300002[cm] - 300000[cm]
-    .CHECK_OUTPUT((b1-=b3), "2[sec]")                                 //b1 = 14402[sec] - 4[hour]
-    .CHECK_OUTPUT((b3-=b2), "4[hour]")                                //b3 = 4.05[hour] - 3[min]
-    .CHECK_OUTPUT((c1-=c4), "2[g]")                                   //c1 = 100002[g] - 0.1[ton]
-    .CHECK_OUTPUT((c2-=c2), "0[kg]")                                  //c2 = 6[kg] - 6[kg]
-
-
-    .setname("Operator '-=' binary - Incompatible dimensions")
-    .CHECK_THROWS(a1-=b1)
-    .CHECK_THROWS(b1-=c1)
-    .CHECK_THROWS(c1-=a1)
-    .CHECK_THROWS(a2-=c2)
-
-
-    .CHECK_OUTPUT((c2=PhysicalNumber(3,Unit::KG)), "3[kg]")           //return c2 to previous value
-
-
-    .setname("Operator '==' binary - Compatible dimensions")
-    .CHECK_EQUAL(a1==a1,true)                                         
-    .CHECK_EQUAL(a2==PhysicalNumber(3000,Unit::M),true)               //3[km] == 3000[m]                                      
-    .CHECK_EQUAL(a3==PhysicalNumber(0.004,Unit::KM),true)             //4[m] == 0.004[km]                            
-    .CHECK_EQUAL(b1==b1,true)
-    .CHECK_EQUAL(b2==PhysicalNumber(180,Unit::SEC),true)              //3[min] == 180[sec]
-    .CHECK_EQUAL(b2==PhysicalNumber(0.05,Unit::HOUR),true)            //3[min] == 0.05[hour]
-
-
-    .setname("Operator '!=' binary - Compatible dimensions")
-    .CHECK_EQUAL(a1!=a2,true)                                         //2[cm] != 3[km]                                         
-    .CHECK_EQUAL(a3!=PhysicalNumber(3000,Unit::M),true)               //4[m] != 3000[m]                                      
-    .CHECK_EQUAL(a4!=PhysicalNumber(0.004,Unit::KM),true)             //0.1[km] != 0.004[km]                            
-    .CHECK_EQUAL(b1!=b2,true)                                         //2[sec] != 3[min]
-    .CHECK_EQUAL(b3!=PhysicalNumber(180,Unit::SEC),true)              //4[hour] != 180[sec]
-    .CHECK_EQUAL(b4!=PhysicalNumber(0.05,Unit::HOUR),true)            //0.1[hour] != 0.05[hour]
-
-
-    .setname("Operator '==','!=' binary - Incompatible dimensions")
-    .CHECK_THROWS(a1==b1)
-    .CHECK_THROWS(b1==c1)
-    .CHECK_THROWS(c1!=a1)
-    .CHECK_THROWS(a2!=c2)
-
-
-    .setname("Operator '<=' binary - Compatible dimensions")
-    .CHECK_EQUAL(a1<=a1,true)                                         //2[cm] <= 2[cm]
-    .CHECK_EQUAL(a1<=a2,true)                                         //2[cm] <= 3[km]                                         
-    .CHECK_EQUAL(a4<=a2,true)                                         //0.1[km] <= 3[km]
-    .CHECK_EQUAL(b4<=b3,true)                                         //0.1[hour] <= 4[hour]
-    .CHECK_EQUAL(b4<=PhysicalNumber(10,Unit::MIN),true)               //0.1[hour] <= 10[min]
-    .CHECK_EQUAL(c2<=c3,true)                                         //3[kg] <= 4[ton]
-    .CHECK_EQUAL(c1<=c4,true)                                         //2[g] <= 0.1[ton]
-    
-
-    .setname("Operator '>=' binary - Compatible dimensions")
-    .CHECK_EQUAL(a1>=a1,true)                                         //2[cm] >= 2[cm]
-    .CHECK_EQUAL(a2>=a1,true)                                         //3[km]  >= 2[cm]                                        
-    .CHECK_EQUAL(a2>=a4,true)                                         //3[km] >= 0.1[km]
-    .CHECK_EQUAL(b3>=b4,true)                                         //4[hour] >= 0.1[hour]
-    .CHECK_EQUAL(PhysicalNumber(10,Unit::MIN)>=b4,true)               //10[min] >= 0.1[hour]
-    .CHECK_EQUAL(c3>=c2,true)                                         //4[ton] >= 3[kg]
-    .CHECK_EQUAL(c4>=c1,true)                                         //0.1[ton] >= 2[g]
-
-
-    .setname("Operator '<=','>=' binary - Incompatible dimensions")
-    .CHECK_THROWS(a1<=b1)
-    .CHECK_THROWS(b1>=c1)
-    .CHECK_THROWS(c1>=a1)
-    .CHECK_THROWS(a2<=c2)
-
-
-    .setname("Operator '<' binary - Compatible dimensions")
-    .CHECK_EQUAL(a1<a1,false)                                         //2[cm] !< 2[cm]
-    .CHECK_EQUAL(a1<a2,true)                                          //2[cm] < 3[km]                                         
-    .CHECK_EQUAL(a4<a2,true)                                          //0.1[km] < 3[km]
-    .CHECK_EQUAL(b4<b3,true)                                          //0.1[hour] < 4[hour]
-    .CHECK_EQUAL(b4<PhysicalNumber(10,Unit::MIN),true)                //0.1[hour] < 10[min]
-    .CHECK_EQUAL(c2<c3,true)                                          //3[kg] < 4[ton]
-    .CHECK_EQUAL(c1<c4,true)                                          //2[g] < 0.1[ton]
-
-
-    .setname("Operator '>' binary - Compatible dimensions")
-    .CHECK_EQUAL(a1>a1,false)                                         //2[cm] !> 2[cm]
-    .CHECK_EQUAL(a2>a1,true)                                          //3[km] > 2[cm]                                        
-    .CHECK_EQUAL(a2>a4,true)                                          //3[km] > 0.1[km]
-    .CHECK_EQUAL(b3>b4,true)                                          //4[hour] > 0.1[hour]
-    .CHECK_EQUAL(PhysicalNumber(10,Unit::MIN)>b4,true)                //10[min] > 0.1[hour]
-    .CHECK_EQUAL(c3>c2,true)                                          //4[ton] > 3[kg]
-    .CHECK_EQUAL(c4>c1,true)                                          //0.1[ton] > 2[g]
-
-
-    .setname("Operator '++(postfix)' unary - Compatible dimensions")
-    .CHECK_OUTPUT(a1++,"3[cm]")                                       //2[cm]++ = 3[cm]
-    .CHECK_OUTPUT(a2++,"4[km]")                                       //3[km]++ = 4[cm]
-    .CHECK_OUTPUT(a3++,"5[m]")                                        //4[m]++ = 5[m]
-    .CHECK_OUTPUT(a4++,"1.1[km]")                                     //0.1[km]++ = 1.1[km]
-    .CHECK_OUTPUT(PhysicalNumber(60,Unit::MIN)++,"61[min]")           //60[min]++ = 61[min]
-    .CHECK_OUTPUT(PhysicalNumber(99,Unit::SEC)++,"100[min]")          //99[min]++ = 100[min]
-
-    
-    .setname("Operator '--(postfix)' unary - Compatible dimensions")
-    .CHECK_OUTPUT(a1--,"2[cm]")                                       //3[cm]-- = 2[cm]
-    .CHECK_OUTPUT(a2--,"3[km]")                                       //4[km]-- = 3[cm]
-    .CHECK_OUTPUT(a3--,"4[m]")                                        //5[m]-- = 4[m]
-    .CHECK_OUTPUT(a4--,"0.1[km]")                                     //1.1[km]-- = 0.1[km]
-    .CHECK_OUTPUT(PhysicalNumber(60,Unit::MIN)--,"59[min]")           //60[min]-- = 59[min]
-    .CHECK_OUTPUT(PhysicalNumber(99,Unit::SEC)--,"98[min]")          //99[min]-- = 98[min]
-
-
-    .setname("Operator '(prefix)++' unary - Compatible dimensions")
-    .CHECK_OUTPUT(++a1,"3[cm]")                                       //++2[cm] = 3[cm]
-    .CHECK_OUTPUT(++a2,"4[km]")                                       //++3[km] = 4[cm]
-    .CHECK_OUTPUT(++a3,"5[m]")                                        //++4[m] = 5[m]
-    .CHECK_OUTPUT(++a4,"1.1[km]")                                     //++0.1[km] = 1.1[km]
-    .CHECK_OUTPUT(++PhysicalNumber(60,Unit::MIN),"61[min]")           //++60[min] = 61[min]
-    .CHECK_OUTPUT(++PhysicalNumber(99,Unit::SEC),"100[min]")          //++99[min] = 100[min]
-
-
-    .setname("Operator '(prefix)--' unary - Compatible dimensions")
-    .CHECK_OUTPUT(--a1,"2[cm]")                                       //--3[cm] = 2[cm]
-    .CHECK_OUTPUT(--a2,"3[km]")                                       //--4[km] = 3[cm]
-    .CHECK_OUTPUT(--a3,"4[m]")                                        //--5[m] = 4[m]
-    .CHECK_OUTPUT(--a4,"0.1[km]")                                     //--1.1[km] = 0.1[km]
-    .CHECK_OUTPUT(--PhysicalNumber(60,Unit::MIN),"59[min]")           //--60[min] = 59[min]
-    .CHECK_OUTPUT(--PhysicalNumber(99,Unit::SEC),"98[min]")           //--99[min] = 98[min]
-
-
-    .setname("Operator '+' unary - Compatible dimensions")
-    .CHECK_EQUAL(+a1,PhysicalNumber(2,Unit::CM))                           //+2[cm] = 2[cm]
-    .CHECK_EQUAL(+PhysicalNumber(-2,Unit::CM),PhysicalNumber(2,Unit::CM))  //+(-2)[cm] = 2[cm]
-    .CHECK_EQUAL(+PhysicalNumber(0,Unit::MIN),PhysicalNumber(0,Unit::MIN)) //+0[cm] = 0[cm]
-
-
-    .setname("Operator '-' unary - Compatible dimensions")
-    .CHECK_EQUAL(-PhysicalNumber(1,Unit::MIN),PhysicalNumber(-1,Unit::MIN))//-1[min] = -1[min]
-    .CHECK_EQUAL(-c2,PhysicalNumber(-3,Unit::KG))                          //-3[kg] = -3[kg]
-    .CHECK_EQUAL(-a4,PhysicalNumber(-0.1,Unit::KM))                        //-0.1[km] = -0.1[km]
-
-
-    .setname("Input - Compatible dimensions")
-    .CHECK_OK(istringstream("700[kg]") >> x)
-    .CHECK_OUTPUT(x,"700[kg]")
-    .CHECK_OK(istringstream("20[hour]") >> y)
-    .CHECK_OUTPUT(y,"20[hour]")
-    .CHECK_OK(istringstream("5[m]") >> z)
-    .CHECK_OUTPUT(z,"5[m]")
-    .CHECK_OK(istringstream("700[kg]") >> y)
-    .CHECK_OUTPUT(y,"700[kg]")
-    .CHECK_OK(istringstream("700[kg]") >> z)
-    .CHECK_OUTPUT(z,"700[kg]")
-    .CHECK_OK(istringstream("5[m]") >> y)
-    .CHECK_OUTPUT(y,"5[m]")
+  .CHECK_EQUAL((PhysicalNumber(1000, Unit::KG))!=(PhysicalNumber(100, Unit::G)),true)
+  .CHECK_EQUAL((PhysicalNumber(1, Unit::HOUR))!=(PhysicalNumber(1, Unit::MIN)),true)
+  .CHECK_EQUAL((PhysicalNumber(23, Unit::M))!=(PhysicalNumber(100000, Unit::CM)),true)
+  .CHECK_EQUAL((PhysicalNumber(1, Unit::TON))!=(PhysicalNumber(60, Unit::G)),true)
 
 
 
@@ -292,4 +399,3 @@ int main() {
     cout <<  "*** Grade: " << grade << " ***" << endl;
     return grade;
 }
-
