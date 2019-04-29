@@ -73,6 +73,7 @@ bool PhysicalNumber::operator!=(const PhysicalNumber &value) const
     return *this;
 }
 
+
  PhysicalNumber &PhysicalNumber::operator--()
 {
     num--;
