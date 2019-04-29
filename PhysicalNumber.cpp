@@ -14,7 +14,7 @@ PhysicalNumber::PhysicalNumber(double mynum, Unit myunit)
     unit = myunit;
 }
 
-//////////////// operations +, -, +=, -=, ==, !=////////////////
+//////////////// operations +, -, +=, -=, ==, !=/////////////
 
 PhysicalNumber PhysicalNumber::operator+(const PhysicalNumber &other) const
 {

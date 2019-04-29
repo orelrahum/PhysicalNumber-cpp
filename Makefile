@@ -1,5 +1,6 @@
 #!make -f
 
+
 all: test
 	./$<
 
